@@ -1,0 +1,313 @@
+TechFlow — Central Inteligente de Suporte de TI
+
+1. Apresentação do projeto
+
+O TechFlow é um sistema web desenvolvido com a proposta de centralizar e organizar o atendimento de suporte técnico de TI em organizações.
+
+O sistema permitirá que usuários registrem problemas relacionados à tecnologia, acompanhem o andamento de suas solicitações e recebam informações sobre a resolução. Ao mesmo tempo, os técnicos poderão organizar seus atendimentos e os administradores terão recursos para gerenciar a equipe e acompanhar os chamados.
+
+2. Problema identificado
+
+Em muitas organizações, os problemas relacionados à tecnologia são comunicados por diferentes meios, como mensagens, e-mails ou conversas presenciais.
+
+Essa falta de centralização pode dificultar o acompanhamento das solicitações, causar perda de informações, gerar demora nos atendimentos e concentrar muitos chamados em determinados técnicos, enquanto outros possuem menos atividades.
+
+Além disso, sem um sistema organizado, torna-se mais difícil identificar a prioridade dos problemas, acompanhar os responsáveis e consultar o histórico dos atendimentos.
+
+Público afetado
+
+O problema afeta principalmente:
+
+Funcionários e colaboradores que precisam solicitar suporte técnico.
+
+Técnicos de TI responsáveis por resolver os problemas.
+
+Administradores e gestores que precisam acompanhar e organizar os atendimentos.
+
+3. Proposta de solução
+
+O TechFlow propõe desenvolver uma plataforma web que centralize os chamados de suporte de TI em um único ambiente.
+
+Por meio do sistema, os usuários poderão registrar problemas, acompanhar solicitações e consultar informações sobre os atendimentos. Os técnicos poderão visualizar e atualizar os chamados sob sua responsabilidade, enquanto os administradores poderão gerenciar usuários, equipes e distribuição de atividades.
+
+Uma das propostas de destaque será a distribuição inteligente de chamados, que buscará direcionar novas solicitações para técnicos habilitados que possuam menos chamados ativos, contribuindo para uma divisão mais equilibrada do trabalho.
+
+4. Objetivos do sistema
+
+Objetivo geral
+
+Desenvolver um sistema web para melhorar a organização, o acompanhamento e a distribuição dos atendimentos de suporte técnico de TI.
+
+Objetivos específicos
+
+Centralizar as solicitações de suporte.
+
+Facilitar a comunicação entre solicitantes e técnicos.
+
+Organizar os chamados por categoria, prioridade e situação.
+
+Permitir o acompanhamento dos atendimentos.
+
+Controlar os níveis de acesso dos usuários.
+
+Registrar o histórico das alterações realizadas.
+
+Melhorar a distribuição dos chamados entre os técnicos.
+
+5. Principais funcionalidades previstas
+
+Cadastro de usuários: permitir o registro de novos usuários no sistema.
+
+Login: permitir o acesso por meio de credenciais.
+
+Abertura de chamados: registrar problemas com título, descrição, categoria e prioridade.
+
+Acompanhamento: permitir que os solicitantes acompanhem o andamento de suas solicitações.
+
+Gerenciamento de chamados: permitir que técnicos iniciem, atualizem e resolvam atendimentos.
+
+Distribuição inteligente: direcionar chamados para técnicos habilitados considerando a quantidade de chamados ativos.
+
+Gerenciamento de usuários: permitir que administradores gerenciem os usuários e seus perfis.
+
+Histórico: armazenar informações sobre alterações e atendimentos realizados.
+
+Avaliação: permitir que o solicitante avalie o atendimento após sua conclusão.
+
+Painel administrativo: apresentar informações gerais sobre os chamados e a equipe.
+
+6. Tipos de usuários e suas ações
+
+O sistema contará com três perfis principais:
+
+6.1 Solicitante
+
+Usuário que precisa de suporte técnico.
+
+Ações previstas:
+
+Realizar cadastro e login.
+
+Abrir novos chamados.
+
+Consultar seus próprios chamados.
+
+Acompanhar o andamento das solicitações.
+
+Complementar informações quando permitido.
+
+Avaliar o atendimento após a resolução.
+
+6.2 Técnico de TI
+
+Usuário responsável pelo atendimento dos chamados.
+
+Ações previstas:
+
+Realizar login.
+
+Visualizar chamados atribuídos a si.
+
+Iniciar atendimentos.
+
+Atualizar a situação dos chamados.
+
+Registrar observações.
+
+Informar a solução do problema.
+
+Consultar o histórico dos atendimentos sob sua responsabilidade.
+
+6.3 Administrador
+
+Usuário responsável pela administração do sistema.
+
+Ações previstas:
+
+Gerenciar usuários.
+
+Gerenciar equipes e técnicos.
+
+Cadastrar categorias e especialidades.
+
+Acompanhar todos os chamados.
+
+Reatribuir chamados quando necessário.
+
+Consultar indicadores e informações gerais do atendimento.
+
+7. Fluxo básico de funcionamento
+
+O usuário acessa o sistema.
+
+Realiza o cadastro ou login.
+
+Caso seja um solicitante, registra um chamado informando o problema.
+
+O sistema recebe e armazena a solicitação.
+
+O sistema identifica os técnicos habilitados para atender aquela categoria.
+
+A distribuição considera a quantidade de chamados ativos de cada técnico elegível.
+
+O técnico responsável visualiza o chamado e inicia o atendimento.
+
+Durante o atendimento, o técnico pode atualizar a situação e registrar informações.
+
+Após resolver o problema, o técnico registra a solução e conclui o chamado.
+
+O solicitante pode consultar a resolução e avaliar o atendimento.
+
+8. Regras gerais previstas
+
+Cada usuário terá um perfil de acesso.
+
+O solicitante poderá consultar seus próprios chamados.
+
+O técnico poderá atuar nos chamados atribuídos a ele, respeitando suas permissões.
+
+O administrador terá acesso às funções de gerenciamento.
+
+Um chamado deverá possuir informações suficientes para identificar o problema.
+
+A conclusão de um chamado deverá incluir o registro da solução.
+
+A distribuição inteligente deverá considerar somente técnicos habilitados para o atendimento.
+
+O sistema deverá manter o histórico das alterações importantes.
+
+9. Tecnologias previstas
+
+Tecnologia
+
+Utilização
+
+HTML
+
+Estrutura das páginas
+
+CSS
+
+Estilização da interface
+
+JavaScript
+
+Interações e manipulação do DOM
+
+Node.js
+
+Execução do backend
+
+Express
+
+Construção da API
+
+MySQL
+
+Banco de dados relacional
+
+Fetch API
+
+Comunicação entre frontend e backend
+
+JWT
+
+Autenticação dos usuários
+
+Git e GitHub
+
+Versionamento e armazenamento do projeto
+
+10. Estrutura inicial do projeto
+
+A estrutura será organizada separando o frontend, o backend, o banco de dados e a documentação.
+
+techflow/
+│
+├── README.md
+├── .gitignore
+│
+├── backend/
+│   ├── package.json
+│   ├── server.js
+│   │
+│   ├── routes/
+│   │   ├── authRoutes.js
+│   │   ├── chamadosRoutes.js
+│   │   ├── usuariosRoutes.js
+│   │   └── tecnicosRoutes.js
+│   │
+│   ├── controllers/
+│   │   ├── authController.js
+│   │   ├── chamadosController.js
+│   │   ├── usuariosController.js
+│   │   └── tecnicosController.js
+│   │
+│   ├── middlewares/
+│   │   ├── authMiddleware.js
+│   │   └── permissaoMiddleware.js
+│   │
+│   └── database/
+│       └── conexao.js
+│
+├── frontend/
+│   ├── index.html
+│   ├── script.js
+│   └── style.css
+│
+└── sql/
+    └── techflow.sql
+
+10.1 Organização do backend
+
+O backend será desenvolvido com Node.js e Express, utilizando separação de responsabilidades:
+
+routes: definirão os caminhos e endpoints da API.
+
+controllers: conterão as funções responsáveis pelo processamento das requisições e pelas regras do sistema.
+
+middlewares: realizarão verificações de autenticação e permissões dos usuários.
+
+database: centralizará a configuração e a conexão com o banco de dados.
+
+10.2 Organização do frontend
+
+O frontend será desenvolvido utilizando HTML, CSS e JavaScript.
+
+index.html: estrutura principal da interface.
+
+style.css: aparência e organização visual.
+
+script.js: interações, manipulação do DOM e comunicação com a API por meio de Fetch.
+
+10.3 Organização do banco de dados
+
+A pasta sql armazenará os scripts necessários para criação e configuração do banco de dados MySQL.
+
+A modelagem será desenvolvida nas próximas etapas do projeto, considerando as entidades necessárias para o funcionamento do TechFlow.
+
+11. Utilização do GitHub
+
+Todo o desenvolvimento será mantido em um único repositório no GitHub, conforme solicitado no enunciado do projeto.
+
+O repositório será utilizado para:
+
+Armazenar o código-fonte.
+
+Manter os arquivos organizados.
+
+Registrar a evolução por meio de commits.
+
+Disponibilizar o README.md e os scripts SQL.
+
+Acompanhar as alterações realizadas em cada etapa.
+
+Arquivos privados, como .env, senhas, tokens e credenciais, não serão enviados ao repositório.
+
+12. Considerações finais
+
+O TechFlow busca oferecer uma solução para melhorar a organização dos atendimentos de suporte técnico de TI, reduzindo a dispersão de informações e facilitando o acompanhamento das solicitações.
+
+A proposta contempla diferentes perfis de usuários, controle de acesso, gerenciamento de chamados e distribuição inteligente de atendimentos.
+
+O desenvolvimento será realizado de forma progressiva, iniciando pela organização do projeto e documentação, seguindo para a implementação do banco de dados e autenticação, depois para o CRUD e integração entre as partes, até a conclusão do sistema.
