@@ -38,16 +38,18 @@ frontend/            Interface (próximas etapas)
 
 1. Instale MySQL 8 e crie um usuário de banco com permissão sobre `techflow`.
 2. Execute `sql/techflow.sql` no MySQL (por exemplo, `mysql -u root -p < sql/techflow.sql`).
-3. Copie `backend/.env.example` para `backend/.env` e ajuste as credenciais do banco. Defina `JWT_SECRET` com um segredo aleatório de pelo menos 32 caracteres. Mantenha `.env` fora do Git.
+3. No PowerShell, a partir da raiz do projeto, crie a configuração com `Copy-Item backend/.env.example backend/.env`. Edite `backend/.env` com as credenciais do banco e defina `JWT_SECRET` com um segredo aleatório de pelo menos 32 caracteres. Mantenha `.env` fora do Git.
 4. No diretório `backend`, instale e inicie:
 
    ```bash
-   npm install
-   npm run criar-admin
-   npm run dev
+   npm.cmd install
+   npm.cmd run criar-admin
+   npm.cmd run dev
    ```
 
-   O script solicita nome, e-mail e senha sem gravar credenciais no repositório. Ele cria o primeiro administrador com senha protegida por bcrypt. Para executar sem modo de desenvolvimento, use `npm start`.
+   No PowerShell, use `npm.cmd` para evitar bloqueios da política de execução de scripts ao chamar `npm.ps1`. O script solicita nome, e-mail e senha sem gravar credenciais no repositório. Ele cria o primeiro administrador com senha protegida por bcrypt. Para executar sem modo de desenvolvimento, use `npm.cmd start`.
+
+O servidor carrega `backend/.env` pelo caminho do próprio arquivo, mesmo que seja iniciado a partir da raiz com `node backend/server.js`. Se uma variável obrigatória estiver faltando, ele informa quais devem ser configuradas.
 
 Por padrão, a API fica em `http://localhost:3000`. O CORS aceita `http://localhost:5500`; ajuste `FRONTEND_ORIGIN` para a origem usada pelo frontend. O endpoint `/api/health` verifica a conexão com o banco.
 

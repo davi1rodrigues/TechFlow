@@ -1,14 +1,26 @@
-require('dotenv').config();
+const path = require('node:path');
+
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+
+const obrigatorias = ['DB_HOST', 'DB_NAME', 'DB_USER', 'JWT_SECRET'];
+const ausentes = obrigatorias.filter((nome) => !process.env[nome]);
+
+if (ausentes.length > 0) {
+  throw new Error(
+    `Configure backend/.env antes de iniciar. Variáveis ausentes: ${ausentes.join(', ')}. ` +
+      'Use backend/.env.example como modelo.',
+  );
+}
+
+if (process.env.JWT_SECRET.length < 32) {
+  throw new Error('JWT_SECRET em backend/.env deve ter pelo menos 32 caracteres.');
+}
 
 const express = require('express');
 const cors = require('cors');
 const pool = require('./database/conexao');
 const authRoutes = require('./routes/authRoutes');
 const usuariosRoutes = require('./routes/usuariosRoutes');
-
-if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
-  throw new Error('Configure JWT_SECRET com pelo menos 32 caracteres no arquivo .env.');
-}
 
 const app = express();
 const porta = Number(process.env.PORT || 3000);
