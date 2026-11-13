@@ -1,6 +1,30 @@
 # TechFlow
 
-Central de atendimento de suporte de TI. O sistema organiza solicitações, permite acompanhar os chamados e prevê a distribuição de trabalho entre técnicos habilitados.
+Central de atendimento de suporte de TI. O sistema organiza solicitações, permite acompanhar os chamados e distribui novos chamados entre técnicos habilitados pela categoria e pela quantidade de atendimentos ativos.
+
+## Entrega 3: CRUD, integração e permissões
+
+A entrega inclui CRUD completo da entidade principal `chamados`, interface HTML/CSS/JavaScript integrada à API REST por Fetch, validações de negócio no servidor e controle de acesso aplicado em cada operação da API.
+
+### Regras de acesso aos chamados
+
+- `solicitante`: abre chamados, consulta somente os próprios e pode editar ou excluir enquanto estiverem abertos.
+- `tecnico`: consulta somente chamados atribuídos a si e atualiza a situação e a solução.
+- `admin`: consulta, edita e exclui todos os chamados.
+- Encerrar como resolvido/fechado exige registrar uma solução. Chamados novos são direcionados ao técnico habilitado na categoria com menos chamados ativos; se não houver técnico habilitado, ficam sem atribuição.
+
+### Rotas de chamados
+
+Todas exigem `Authorization: Bearer <token>`.
+
+| Método | Rota | Uso |
+|---|---|---|
+| `GET` | `/api/chamados/categorias` | Lista categorias ativas para o formulário |
+| `GET` | `/api/chamados` | Lista chamados visíveis ao perfil autenticado |
+| `GET` | `/api/chamados/:id` | Consulta um chamado respeitando o escopo do perfil |
+| `POST` | `/api/chamados` | Abre chamado com `titulo`, `descricao`, `categoria_id` e `prioridade` |
+| `PUT` | `/api/chamados/:id` | Atualiza os campos permitidos para o perfil |
+| `DELETE` | `/api/chamados/:id` | Exclui conforme as regras de acesso |
 
 ## Entrega 2: banco de dados e autenticação
 
@@ -31,7 +55,7 @@ backend/
   server.js
 sql/
   techflow.sql       Banco e tabelas relacionadas
-frontend/            Interface (próximas etapas)
+frontend/            Interface integrada (HTML, CSS e JavaScript)
 ```
 
 ## Configuração e execução
@@ -51,7 +75,9 @@ frontend/            Interface (próximas etapas)
 
 O servidor carrega `backend/.env` pelo caminho do próprio arquivo, mesmo que seja iniciado a partir da raiz com `node backend/server.js`. Se uma variável obrigatória estiver faltando, ele informa quais devem ser configuradas.
 
-Por padrão, a API fica em `http://localhost:3000`. O CORS aceita `http://localhost:5500`; ajuste `FRONTEND_ORIGIN` para a origem usada pelo frontend. O endpoint `/api/health` verifica a conexão com o banco.
+Por padrão, a API fica em `http://localhost:3000`. O CORS aceita Live Server em `localhost` ou `127.0.0.1`, nas portas 5500 e 5501, além da origem definida em `FRONTEND_ORIGIN`. O endpoint `/api/health` verifica a conexão com o banco.
+
+Para abrir a interface, inicie um servidor estático na pasta `frontend` (por exemplo, Live Server do VS Code na porta 5500) e acesse `http://localhost:5500`. A interface permite criar conta de solicitante, entrar e realizar as ações disponíveis ao perfil. Para testar técnicos, cadastre-os pelo fluxo administrativo existente e associe suas categorias na tabela `tecnico_especialidades`.
 
 ## Rotas desta etapa
 
@@ -87,10 +113,11 @@ Exemplo de cadastro:
 
 As chaves estrangeiras e índices ficam definidos em `sql/techflow.sql`. O banco registra apenas hash bcrypt; a senha original não é armazenada. Tokens JWT expiram conforme `JWT_EXPIRES_IN` (padrão: `1h`).
 
-## Segurança e limites desta entrega
+## Segurança
 
 - Segredos e credenciais são lidos de variáveis de ambiente e `.env` está ignorado pelo Git.
 - Consultas usam parâmetros para evitar concatenação de valores fornecidos pelo usuário.
 - A API valida token e consulta novamente a conta no banco, então contas desativadas perdem acesso.
 - Autorização por perfil é aplicada na API, não depende de esconder elementos de interface.
-- O CRUD de chamados, a interface integrada e a distribuição automática serão desenvolvidos nas próximas etapas.
+- A API aplica a autorização independentemente dos controles exibidos na interface.
+- Entradas são validadas no servidor e consultas usam parâmetros preparados.

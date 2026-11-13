@@ -27,6 +27,14 @@ CREATE TABLE IF NOT EXISTS categorias (
   CONSTRAINT uq_categorias_nome UNIQUE (nome)
 ) ENGINE=InnoDB;
 
+INSERT INTO categorias (nome, descricao) VALUES
+  ('Hardware', 'Computadores, periféricos e equipamentos'),
+  ('Software', 'Aplicativos, sistemas e licenças'),
+  ('Rede e Internet', 'Conectividade, Wi-Fi e acesso à rede'),
+  ('Acesso e contas', 'Senhas, permissões e contas de usuário'),
+  ('Outros', 'Solicitações não enquadradas nas demais categorias')
+ON DUPLICATE KEY UPDATE descricao = VALUES(descricao);
+
 CREATE TABLE IF NOT EXISTS tecnico_especialidades (
   tecnico_id BIGINT UNSIGNED NOT NULL,
   categoria_id BIGINT UNSIGNED NOT NULL,

@@ -21,12 +21,24 @@ const cors = require('cors');
 const pool = require('./database/conexao');
 const authRoutes = require('./routes/authRoutes');
 const usuariosRoutes = require('./routes/usuariosRoutes');
+const chamadosRoutes = require('./routes/chamadosRoutes');
 
 const app = express();
 const porta = Number(process.env.PORT || 3000);
 
 app.disable('x-powered-by');
-app.use(cors({ origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5500' }));
+const origensFrontend = new Set([
+  process.env.FRONTEND_ORIGIN || 'http://localhost:5500',
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',
+  'http://localhost:5501',
+  'http://127.0.0.1:5501',
+]);
+app.use(cors({
+  origin(origem, callback) {
+    callback(null, !origem || origensFrontend.has(origem));
+  },
+}));
 app.use(express.json({ limit: '10kb' }));
 
 app.get('/api/health', async (req, res, next) => {
@@ -40,6 +52,7 @@ app.get('/api/health', async (req, res, next) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/chamados', chamadosRoutes);
 
 app.use((req, res) => res.status(404).json({ erro: 'Rota não encontrada.' }));
 

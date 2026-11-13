@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123b5d">
+  <title>TechFlow | Central de suporte</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-mark">T</span><span>TechFlow<small>Central de suporte</small></span></a>
+    <div id="user-area" class="user-area" hidden><span id="user-label"></span><button id="sair" class="button button-quiet">Sair</button></div>
+  </header>
+  <main class="container">
+    <section id="auth-view" class="auth-layout">
+      <div class="intro"><p class="eyebrow">SUPORTE DE TI, SEM COMPLICAÇÃO</p><h1>O que está acontecendo?</h1><p>Registre seu chamado e acompanhe cada etapa do atendimento em um só lugar.</p><div class="feature"><span>01</span><div><b>Conte o que precisa</b><small>Descreva o problema e escolha uma categoria.</small></div></div><div class="feature"><span>02</span><div><b>Acompanhe o atendimento</b><small>Veja o status e a solução registrada pela equipe.</small></div></div></div>
+      <section class="panel auth-card"><div class="tabs"><button class="tab active" data-mode="login">Entrar</button><button class="tab" data-mode="cadastro">Criar conta</button></div>
+        <form id="auth-form"><h2 id="auth-title">Acesse sua conta</h2><label id="nome-field" hidden>Nome<input name="nome" minlength="2" maxlength="120" autocomplete="name"></label><label>E-mail<input name="email" type="email" required maxlength="254" autocomplete="email"></label><label>Senha<input name="senha" type="password" required minlength="8" autocomplete="current-password"></label><button class="button button-primary full" type="submit">Entrar</button><p id="auth-message" class="form-message" role="status"></p></form>
+      </section>
+    </section>
+    <section id="app-view" hidden>
+      <div class="page-heading"><div><p class="eyebrow">ÁREA DE ATENDIMENTO</p><h1>Chamados</h1><p id="welcome"></p></div><button id="novo-chamado" class="button button-primary">＋ Novo chamado</button></div>
+      <section id="form-panel" class="panel form-panel" hidden><div class="panel-heading"><div><p class="eyebrow">SOLICITAÇÃO</p><h2 id="ticket-form-title">Abrir chamado</h2></div><button id="cancelar-edicao" class="icon-button" aria-label="Fechar formulário">×</button></div>
+        <form id="ticket-form"><input name="id" type="hidden"><div class="form-grid"><label class="span-2">Título<input name="titulo" required minlength="4" maxlength="160" placeholder="Ex.: Não consigo acessar o sistema"></label><label>Categoria<select name="categoria_id" required></select></label><label>Prioridade<select name="prioridade"><option value="baixa">Baixa</option><option value="media" selected>Média</option><option value="alta">Alta</option><option value="urgente">Urgente</option></select></label><label class="span-2">Descrição<textarea name="descricao" required minlength="10" maxlength="5000" rows="4" placeholder="Explique o que aconteceu e quando começou"></textarea></label><label id="status-field" hidden>Situação<select name="status"><option value="aberto">Aberto</option><option value="em_atendimento">Em atendimento</option><option value="aguardando_usuario">Aguardando usuário</option><option value="resolvido">Resolvido</option><option value="fechado">Fechado</option></select></label><label id="solution-field" class="span-2" hidden>Solução<textarea name="solucao" maxlength="5000" rows="3" placeholder="Descreva a solução aplicada"></textarea></label></div><p id="ticket-message" class="form-message" role="status"></p><div class="form-actions"><button type="button" id="cancelar-form" class="button button-secondary">Cancelar</button><button class="button button-primary" type="submit">Salvar chamado</button></div></form>
+      </section>
+      <div id="list-message" class="form-message" role="status"></div><section id="ticket-list" class="ticket-list" aria-live="polite"></section>
+    </section>
+  </main>
+  <footer>TechFlow <span>•</span> Atendimento técnico organizado</footer>
+  <script src="script.js" defer></script>
+</body>
+</html>
