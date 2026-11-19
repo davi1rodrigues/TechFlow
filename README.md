@@ -1,123 +1,111 @@
-# TechFlow
+﻿# TechFlow
 
-Central de atendimento de suporte de TI. O sistema organiza solicitações, permite acompanhar os chamados e distribui novos chamados entre técnicos habilitados pela categoria e pela quantidade de atendimentos ativos.
+Central de atendimento de suporte de TI. O TechFlow reúne solicitações, acompanha o trabalho da equipe e distribui chamados novos para técnicos habilitados com menos atendimentos ativos.
 
-## Entrega 3: CRUD, integração e permissões
+## Entrega 4 — projeto completo e apresentação
 
-A entrega inclui CRUD completo da entidade principal `chamados`, interface HTML/CSS/JavaScript integrada à API REST por Fetch, validações de negócio no servidor e controle de acesso aplicado em cada operação da API.
-
-### Regras de acesso aos chamados
-
-- `solicitante`: abre chamados, consulta somente os próprios e pode editar ou excluir enquanto estiverem abertos.
-- `tecnico`: consulta somente chamados atribuídos a si e atualiza a situação e a solução.
-- `admin`: consulta, edita e exclui todos os chamados.
-- Encerrar como resolvido/fechado exige registrar uma solução. Chamados novos são direcionados ao técnico habilitado na categoria com menos chamados ativos; se não houver técnico habilitado, ficam sem atribuição.
-
-### Rotas de chamados
-
-Todas exigem `Authorization: Bearer <token>`.
-
-| Método | Rota | Uso |
-|---|---|---|
-| `GET` | `/api/chamados/categorias` | Lista categorias ativas para o formulário |
-| `GET` | `/api/chamados` | Lista chamados visíveis ao perfil autenticado |
-| `GET` | `/api/chamados/:id` | Consulta um chamado respeitando o escopo do perfil |
-| `POST` | `/api/chamados` | Abre chamado com `titulo`, `descricao`, `categoria_id` e `prioridade` |
-| `PUT` | `/api/chamados/:id` | Atualiza os campos permitidos para o perfil |
-| `DELETE` | `/api/chamados/:id` | Exclui conforme as regras de acesso |
-
-## Entrega 2: banco de dados e autenticação
-
-Esta etapa inclui o esquema relacional MySQL, cadastro e login, armazenamento de senhas com hash bcrypt, emissão e validação de JWT e controle de rotas por perfil. O cadastro público cria somente solicitantes; técnicos e administradores devem ser criados por um administrador/operador autorizado.
-
-### Perfis
-
-- `solicitante`: registra e acompanha os próprios chamados.
-- `tecnico`: atende chamados atribuídos e atua conforme suas permissões.
-- `admin`: gerencia usuários e acompanha o sistema.
+A versão final inclui cadastro e login, autenticação JWT, perfis com autorização validada na API, banco MySQL, CRUD integrado de chamados, distribuição automática, histórico, avaliação do atendimento e painel administrativo. O painel permite gerenciar perfis, especialidades dos técnicos e categorias; administradores também podem reatribuir chamados a técnicos habilitados para a categoria.
 
 ## Tecnologias
 
 - Node.js 20 ou superior, Express e JavaScript
 - MySQL 8.0.16 ou superior
-- bcryptjs para hash de senha
-- JSON Web Token para autenticação
+- HTML, CSS e JavaScript no frontend
+- Fetch API para integração com a API REST
+- bcryptjs para proteger senhas e JSON Web Token para autenticação
 
 ## Estrutura
 
 ```text
 backend/
-  controllers/       Regras de autenticação e consulta de usuários
+  controllers/       Regras de autenticação, usuários e chamados
   database/          Pool de conexão MySQL
   middlewares/       Autenticação JWT e autorização por perfil
   routes/            Rotas da API
   scripts/           Criação segura do primeiro administrador
   server.js
-sql/
-  techflow.sql       Banco e tabelas relacionadas
-frontend/            Interface integrada (HTML, CSS e JavaScript)
+frontend/            Interface web integrada
+sql/techflow.sql     Banco, tabelas, chaves e categorias iniciais
+docs/apresentacao.md Roteiro da demonstração final
 ```
 
-## Configuração e execução
+## Instalação e execução
 
-1. Instale MySQL 8 e crie um usuário de banco com permissão sobre `techflow`.
-2. Execute `sql/techflow.sql` no MySQL (por exemplo, `mysql -u root -p < sql/techflow.sql`).
-3. No PowerShell, a partir da raiz do projeto, crie a configuração com `Copy-Item backend/.env.example backend/.env`. Edite `backend/.env` com as credenciais do banco e defina `JWT_SECRET` com um segredo aleatório de pelo menos 32 caracteres. Mantenha `.env` fora do Git.
-4. No diretório `backend`, instale e inicie:
+1. Instale Node.js 20+ e MySQL 8.0.16+.
+2. Execute o script SQL para criar o banco e suas tabelas. Se já configurou uma versão anterior do projeto, execute o script novamente para incluir as tabelas de histórico e avaliações:
 
    ```bash
+   mysql -u root -p < sql/techflow.sql
+   ```
+
+3. Crie `backend/.env` a partir de `backend/.env.example`. Configure `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER` e `DB_PASSWORD`. Substitua `JWT_SECRET` por um segredo aleatório com pelo menos 32 caracteres. Não envie `.env` ao GitHub.
+
+   No PowerShell:
+
+   ```powershell
+   Copy-Item backend/.env.example backend/.env
+   ```
+
+4. Instale as dependências e crie o primeiro administrador:
+
+   ```powershell
+   cd backend
    npm.cmd install
    npm.cmd run criar-admin
    npm.cmd run dev
    ```
 
-   No PowerShell, use `npm.cmd` para evitar bloqueios da política de execução de scripts ao chamar `npm.ps1`. O script solicita nome, e-mail e senha sem gravar credenciais no repositório. Ele cria o primeiro administrador com senha protegida por bcrypt. Para executar sem modo de desenvolvimento, use `npm.cmd start`.
+   O script solicita nome, e-mail e senha do administrador. Para iniciar sem modo de desenvolvimento, use `npm.cmd start`.
 
-O servidor carrega `backend/.env` pelo caminho do próprio arquivo, mesmo que seja iniciado a partir da raiz com `node backend/server.js`. Se uma variável obrigatória estiver faltando, ele informa quais devem ser configuradas.
+5. Sirva a pasta `frontend` com Live Server (porta 5500 ou 5501) e acesse a página exibida pelo servidor. A API fica em `http://localhost:3000`; `GET /api/health` informa se ela e o MySQL estão acessíveis.
 
-Por padrão, a API fica em `http://localhost:3000`. O CORS aceita Live Server em `localhost` ou `127.0.0.1`, nas portas 5500 e 5501, além da origem definida em `FRONTEND_ORIGIN`. O endpoint `/api/health` verifica a conexão com o banco.
+O backend carrega `backend/.env` com base no caminho do próprio arquivo. A configuração padrão de CORS aceita `localhost` e `127.0.0.1` nas portas 5500 e 5501; use `FRONTEND_ORIGIN` para outra origem de desenvolvimento.
 
-Para abrir a interface, inicie um servidor estático na pasta `frontend` (por exemplo, Live Server do VS Code na porta 5500) e acesse `http://localhost:5500`. A interface permite criar conta de solicitante, entrar e realizar as ações disponíveis ao perfil. Para testar técnicos, cadastre-os pelo fluxo administrativo existente e associe suas categorias na tabela `tecnico_especialidades`.
+## Fluxos principais
 
-## Rotas desta etapa
+- **Solicitante:** cria conta, abre chamados, consulta os próprios registros e pode editá-los ou excluí-los enquanto estiverem abertos. Depois da conclusão, pode deixar uma avaliação de 1 a 5 e um comentário.
+- **Técnico:** tem uma fila própria dos chamados atribuídos a si, com atualização automática a cada 20 segundos e botão para atualizar na hora. Pode filtrar ativos e concluídos e atualizar a situação e a solução. Para receber chamados de uma categoria, precisa estar habilitado nela.
+- **Administrador:** acompanha os chamados, indicadores, avaliações e carga ativa da equipe; altera perfis, administra categorias e especialidades, e reatribui chamados somente a técnicos ativos e habilitados para a categoria.
+- **Distribuição automática:** um chamado novo é enviado ao técnico ativo e habilitado na categoria que tem menos chamados ativos. Sem técnico elegível, fica sem atribuição até a administração encaminhá-lo.
+- **Histórico:** registra abertura, atualizações, reatribuições e avaliações. Solicitantes veem o histórico dos próprios chamados; técnicos veem os que estão atribuídos a eles; administradores consultam todos.
+
+## Rotas da API
+
+As rotas marcadas como autenticadas exigem `Authorization: Bearer <token>`.
 
 | Método | Rota | Acesso | Uso |
 |---|---|---|---|
-| `POST` | `/api/auth/cadastro` | Público | Cadastra solicitante; recebe `nome`, `email` e `senha` |
-| `POST` | `/api/auth/login` | Público | Autentica; recebe `email` e `senha` |
-| `GET` | `/api/auth/me` | Autenticado | Retorna o perfil do usuário do token |
-| `GET` | `/api/usuarios` | Admin | Lista usuários sem retornar hashes de senha |
-| `PATCH` | `/api/usuarios/:id/perfil` | Admin | Altera o perfil para `solicitante`, `tecnico` ou `admin` |
-| `GET` | `/api/health` | Público | Verifica API e conexão MySQL |
+| `GET` | `/api/health` | Público | Estado da API e conexão MySQL |
+| `POST` | `/api/auth/cadastro` | Público | Criar conta de solicitante |
+| `POST` | `/api/auth/login` | Público | Entrar e receber JWT |
+| `GET` | `/api/auth/me` | Autenticado | Consultar a conta do token |
+| `GET` | `/api/chamados/categorias` | Autenticado | Listar categorias ativas |
+| `POST` | `/api/chamados/categorias` | Admin | Cadastrar categoria |
+| `GET` | `/api/chamados` | Autenticado | Listar chamados visíveis ao perfil |
+| `GET` | `/api/chamados/:id` | Autenticado | Consultar um chamado dentro do escopo do perfil |
+| `POST` | `/api/chamados` | Solicitante | Abrir chamado; a API escolhe o técnico elegível |
+| `PUT` | `/api/chamados/:id` | Conforme perfil | Atualizar campos permitidos; admin pode reatribuir |
+| `DELETE` | `/api/chamados/:id` | Admin ou dono aberto | Excluir chamado conforme as regras de acesso |
+| `GET` | `/api/chamados/:id/historico` | Autenticado | Consultar histórico conforme o escopo do perfil |
+| `POST` | `/api/chamados/:id/avaliacao` | Solicitante dono | Avaliar chamado concluído, uma única vez |
+| `GET` | `/api/usuarios` | Admin | Listar dados públicos dos usuários e especialidades |
+| `GET` | `/api/usuarios/painel` | Admin | Indicadores, avaliações, categorias e carga por técnico |
+| `PATCH` | `/api/usuarios/:id/perfil` | Admin | Alterar perfil sem permitir autoalteração |
+| `PATCH` | `/api/usuarios/:id/especialidades` | Admin | Definir as categorias atendidas pelo técnico |
 
-Para rotas protegidas, envie `Authorization: Bearer <token>`. O cadastro público não aceita perfil enviado pelo cliente. Respostas de login/cadastro incluem o token e os dados públicos do usuário.
+## Regras e segurança
 
-O administrador pode atribuir ou remover o perfil de técnico pela rota `PATCH /api/usuarios/:id/perfil`, enviando `{"perfil":"tecnico"}`. A API impede que o administrador altere o próprio perfil.
+- Cadastro público cria somente solicitantes. O primeiro administrador é criado pelo script local.
+- As senhas são armazenadas como hash bcrypt. A API valida JWT e confirma a conta no banco em cada requisição protegida.
+- As permissões são verificadas no backend; esconder um botão no navegador não substitui autorização.
+- Chamados resolvidos ou fechados precisam ter uma solução registrada. Solicitantes só atuam nos próprios chamados abertos, e técnicos só nos que estão atribuídos a eles.
+- As consultas ao banco usam parâmetros preparados; o código não guarda credenciais.
+- O `.gitignore` deve manter `backend/.env` e `node_modules` fora do repositório.
 
-Exemplo de cadastro:
+## Apresentação e demonstração
 
-```json
-{
-  "nome": "Ana Souza",
-  "email": "ana@example.com",
-  "senha": "uma-senha-forte"
-}
-```
+Use o roteiro em [docs/apresentacao.md](docs/apresentacao.md). Ele cobre o problema, a solução, a arquitetura, os perfis, a demonstração do sistema e perguntas que podem surgir.
 
-## Modelo de dados
+## GitHub
 
-- `usuarios`: credenciais, perfil e estado da conta.
-- `categorias`: categorias dos atendimentos.
-- `tecnico_especialidades`: relação muitos-para-muitos entre técnicos e categorias.
-- `chamados`: solicitante, técnico atribuído, categoria, prioridade, situação e solução.
-
-As chaves estrangeiras e índices ficam definidos em `sql/techflow.sql`. O banco registra apenas hash bcrypt; a senha original não é armazenada. Tokens JWT expiram conforme `JWT_EXPIRES_IN` (padrão: `1h`).
-
-## Segurança
-
-- Segredos e credenciais são lidos de variáveis de ambiente e `.env` está ignorado pelo Git.
-- Consultas usam parâmetros para evitar concatenação de valores fornecidos pelo usuário.
-- A API valida token e consulta novamente a conta no banco, então contas desativadas perdem acesso.
-- Autorização por perfil é aplicada na API, não depende de esconder elementos de interface.
-- A API aplica a autorização independentemente dos controles exibidos na interface.
-- Entradas são validadas no servidor e consultas usam parâmetros preparados.
+Mantenha as quatro entregas no mesmo repositório. Atualize este README quando a solução mudar, mantenha o script SQL e registre alterações em commits que descrevam o trabalho realizado. Não publique dependências instaladas localmente, arquivos `.env`, senhas, tokens ou credenciais.

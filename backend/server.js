@@ -34,9 +34,16 @@ const origensFrontend = new Set([
   'http://localhost:5501',
   'http://127.0.0.1:5501',
 ]);
+function origemLocalDesenvolvimento(origem) {
+  if (process.env.NODE_ENV === 'production') return false;
+  try {
+    const url = new URL(origem);
+    return url.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+  } catch { return false; }
+}
 app.use(cors({
   origin(origem, callback) {
-    callback(null, !origem || origensFrontend.has(origem));
+    callback(null, !origem || origensFrontend.has(origem) || origemLocalDesenvolvimento(origem));
   },
 }));
 app.use(express.json({ limit: '10kb' }));

@@ -75,3 +75,28 @@ CREATE TABLE IF NOT EXISTS chamados (
   CONSTRAINT chk_chamado_solucao_resolvido
     CHECK (status NOT IN ('resolvido', 'fechado') OR solucao IS NOT NULL)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS historico_chamados (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  chamado_id BIGINT UNSIGNED NOT NULL,
+  usuario_id BIGINT UNSIGNED NULL,
+  acao VARCHAR(40) NOT NULL,
+  detalhes JSON NULL,
+  criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  INDEX idx_historico_chamado_data (chamado_id, criado_em),
+  CONSTRAINT fk_historico_chamado FOREIGN KEY (chamado_id) REFERENCES chamados (id) ON DELETE CASCADE,
+  CONSTRAINT fk_historico_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS avaliacoes_chamados (
+  chamado_id BIGINT UNSIGNED NOT NULL,
+  solicitante_id BIGINT UNSIGNED NOT NULL,
+  nota TINYINT UNSIGNED NOT NULL,
+  comentario VARCHAR(1000) NULL,
+  criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (chamado_id),
+  CONSTRAINT chk_avaliacao_nota CHECK (nota BETWEEN 1 AND 5),
+  CONSTRAINT fk_avaliacao_chamado FOREIGN KEY (chamado_id) REFERENCES chamados (id) ON DELETE CASCADE,
+  CONSTRAINT fk_avaliacao_solicitante FOREIGN KEY (solicitante_id) REFERENCES usuarios (id) ON DELETE RESTRICT
+) ENGINE=InnoDB;
